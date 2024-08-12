@@ -1,7 +1,7 @@
 from confluent_kafka import Producer, KafkaException
 from pymongo import MongoClient
 from app.helpers.config_wrapper import Config
-import time, uuid
+import time, uuid, json
 import logging
 
 logger = logging.getLogger(__name__)
@@ -62,18 +62,25 @@ class KafkaWrapper:
         retry_count = 0
         success = False
 
+        # Convert the Vote object to a dictionary and then serialize it
+        value_dict = value.to_dict()
+        value_bytes = json.dumps(value_dict).encode("utf-8")
+
+        retry_error = None
+
         while retry_count < retries and not success:
             try:
                 self.producer.produce(
                     topic,
                     key=key,
-                    value=value,
+                    value=value_bytes,
                     partition=partition,
                     callback=self.delivery_report,
                 )
                 self.producer.flush()
                 success = True
             except KafkaException as e:
+                retry_error = e
                 logger.warning(
                     f"Error producing message: {e}, retry counter: {retry_count}",
                     exc_info=True,
@@ -85,7 +92,12 @@ class KafkaWrapper:
             # Write to MongoDB DLQ collection
             dlq_collection = self.mongo_db[f"DLQ_{topic}"]
             dlq_collection.insert_one(
-                {"key": key, "value": value, "error": str(e), "retries": retry_count}
+                {
+                    "key": key,
+                    "value": value,
+                    "error": str(retry_error),
+                    "retries": retry_count,
+                }
             )
             logger.error(
                 f"Message moved to DLQ_{topic} collection after {retry_count} retries.",
