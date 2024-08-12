@@ -99,14 +99,14 @@ components:
     vote_details:
       type: object
       properties:
+        vote_id:
+          type: string
+          description: vote Identifier
+          example: "xxxx-xxxx-xxxx-xxxx-xxxx"
         user_id:
           type: string
           description: ID of the user
           example: "user123"
-        vote_id:
-          type: string
-          description: vote Identifier
-          example: "xxxx-xxxxx-xxxxx-xxxxx"
         vote_value:
           type: string
           description: The vote cast by the user

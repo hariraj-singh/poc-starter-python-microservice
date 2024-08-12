@@ -1,6 +1,12 @@
 Where am i stop
 
-- simnple CRUD for voting app
+## Features implemented
+
+- MongoDb - Database Wrapper
+- Swagger-UI
+- Sample Controller
+- Sample Service
+- DTO Objects - Base class, sample dto
 
 ## pending
 
