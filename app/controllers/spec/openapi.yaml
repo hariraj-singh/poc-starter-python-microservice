@@ -1,14 +1,105 @@
 openapi: 3.0.0
 info:
-  title: Simple API
-  description: This API provides greeting messages.
+  title: Voting API
+  description: This API allows users to vote and retrieve vote data.
   version: "1.0"
 servers:
   - url: http://localhost:5000
     description: Development server
+tags:
+  - name: sample
+    description: Starter Kit
+  - name: vote
+    description: Sample voting engine
 paths:
+  /api/v1/vote:
+    post:
+      tags:
+        - vote
+      operationId: app.controllers.voting_controller.create_vote
+      summary: Create a vote
+      description: Allows a user to cast a vote.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: string
+                  description: ID of the user
+                  example: "user123"
+                vote:
+                  type: string
+                  description: The vote cast by the user
+                  example: "upvote"
+      responses:
+        "201":
+          description: Vote created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/vote_details"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid input data."
+  /api/v1/votes:
+    get:
+      tags:
+        - vote
+      operationId: app.controllers.voting_controller.get_all_votes
+      summary: Get all votes
+      description: Returns a list of all votes.
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/vote_details"
+  /api/v1/votes/{user_id}:
+    get:
+      tags:
+        - vote
+      operationId: app.controllers.voting_controller.get_votes_for_user
+      summary: Get votes for a user
+      description: Returns all votes cast by a specific user.
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/vote_details"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error_response"
   /api/v1/sample:
     get:
+      tags:
+        - sample
       operationId: app.controllers.sample_controller.get_greeting
       summary: Returns a greeting message
       description: |
@@ -38,6 +129,8 @@ paths:
                     type: string
                     example: "Internal server error."
     post:
+      tags:
+        - sample
       operationId: app.controllers.sample_controller.create_greeting
       summary: Create a custom greeting message
       description: |
@@ -81,11 +174,28 @@ paths:
                     example: "Invalid input data."
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Internal server error."
+
+components:
+  schemas:
+    vote_details:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: ID of the user
+          example: "user123"
+        vote_id:
+          type: string
+          description: vote Identifier
+          example: "xxxx-xxxxx-xxxxx-xxxxx"
+        vote:
+          type: string
+          description: The vote cast by the user
+          example: "upvote"
+    error_response:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error details
+          example: "error happned"
