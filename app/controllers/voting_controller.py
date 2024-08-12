@@ -2,7 +2,6 @@
 from flask import request, jsonify
 import app.services.voting_service as vote_mgr
 from app.dto.vote import Vote
-import json
 
 
 def create_vote():

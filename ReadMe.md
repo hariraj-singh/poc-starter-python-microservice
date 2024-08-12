@@ -112,6 +112,7 @@ IMPORTANT: This section should be removed
 
 - cockroach db
 - kafka consumer.producer
+- write to mongo_db needs to be updated.
 - docker for app - having issue running from docker
 - Use production ready Server
 - Clean-up readme.md

@@ -1,4 +1,3 @@
-# config.yaml
 open_api:
   spec_dir: app/controllers/spec
   api_doc: openapi.yaml
@@ -9,3 +8,12 @@ service:
 mongo_database:
   database_url: mongodb://admin:password@localhost:27017
   database_name: voting_db
+
+kafka_server:
+  bootstrap_brokers: localhost:29092,localhost:29093,localhost:29094
+  client_id: sample_starter_kit_client
+  dlq_mongo_database_url: mongodb://admin:password@localhost:27017
+  dlq_database_name: kafka_dlq
+  default_partition: 3
+  default_retries: 3
+  default_interval: 5
