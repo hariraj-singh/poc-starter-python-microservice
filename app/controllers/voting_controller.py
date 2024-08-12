@@ -23,11 +23,11 @@ def get_all_votes():
     return jsonify(all_votes), 200
 
 def get_votes_for_user(user_id):
-    """Get vote for given user"""
+    """Get vote for given user id"""
     global all_votes
     votes = [vote for vote in all_votes if vote['user_id'] == user_id]
     if votes==None or len(votes) ==0:
-        return jsonify({"error": "Vote not found."}), 404
+        return jsonify({"error": "User not found."}), 404
     
     return jsonify(votes), 200
 

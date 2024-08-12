@@ -1,8 +1,8 @@
-openapi: 3.0.0
+openapi: 3.0.3
 info:
   title: Voting API
   description: This API allows users to vote and retrieve vote data.
-  version: "1.0"
+  version: "1.0.0"
 servers:
   - url: http://localhost:5000
     description: Development server
@@ -46,12 +46,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Invalid input data."
-  /api/v1/votes:
+                $ref: "#/components/schemas/error_response"
     get:
       tags:
         - vote
@@ -197,5 +192,4 @@ components:
       properties:
         error:
           type: string
-          description: Error details
-          example: "error happned"
+          example: "Invalid input data."
