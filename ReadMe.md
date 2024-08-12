@@ -1,37 +1,38 @@
 # Starter-Service
 
-Overview of the Microservice
+## Overview
 
-- [Name of the Service]
-- [Few lines of description about the service]
+**Service Name**: [Name of the Service]
 
-## Checklist for the Service
+**Description**:  
+[Few lines of description about the service]
 
-- OpenAPI upto date: [Yes/No]
-- Database: [if so specify]
-- Kafka Dependency: [if so specify]
-- End-points Tests: [if so specify]
-- Unit-Tests: [if so specify]
+## Service Checklist
+
+- **OpenAPI Up-to-date**: [Yes/No]
+- **Database**: [Specify if applicable]
+- **Kafka Dependency**: [Specify if applicable]
+- **End-point Tests**: [Specify if applicable]
+- **Unit Tests**: [Specify if applicable]
 
 ## Configuration Description
 
-Find below documentation for the configuration, the file can be found under `config.yml`
+Below is the documentation for the configuration file, which can be found under `config.yml`:
 
-- [parameter]: [Description]
-- [parameter]: [Description]
-- [parameter]: [Description]
-- [parameter]: [Description]
+- **[parameter]**: [Description]
+- **[parameter]**: [Description]
+- **[parameter]**: [Description]
+- **[parameter]**: [Description]
 
 ---
 
 ## For Developers
 
-Following are some of the documentation taht you can follow to help in your devlopment.
+The following documentation is intended to assist in development.
 
-### Debug your code
+### Debugging Your Code
 
-To setup debug in VSCode, create `.vscode\launch.json` and add the content below.
-Then press `F5`, whihc would start the debug process and run the module `run`
+To set up debugging in VSCode, create a `.vscode\launch.json` file and add the content below. Then press `F5`, which will start the debugging process and run the module `run`.
 
 ```json
 {
@@ -47,20 +48,17 @@ Then press `F5`, whihc would start the debug process and run the module `run`
 }
 ```
 
-### Running Endpoint-Testing
+### Running Endpoint Tests
 
-It is advisable to write tests against the end-points of your API, it shoudl include all business logic,
-but shoudl mock external dependencies like databases, kafka publisher etc.
+It is advisable to write tests against the end-points of your API. These tests should include all business logic and mock external dependencies like databases and Kafka publishers.
 
 Sample tests are written under `tests\api_tests` and include tests for the POST method.
 
-Note: Since the geters are mearly fetching data, and no validation is being done (other than at the DTO, test were skipped),
-but in actual devlopment, it is advisable to include tests for simple getters also.
+**Note**: Since the getters are merely fetching data, and no validation is being done (other than at the DTO), tests were skipped. However, in actual development, it is advisable to include tests for simple getters as well.
 
-To run the test you can `python -m pytest .\tests\api_tests` command (for Linux use python3)
+To run the tests, use the command `python -m pytest .\tests\api_tests` (for Linux, use `python3`).
 
-To debug tests you can use the below entry for `.vscode\launch.json`
-Once done press `F5` to start the test.
+To debug tests, you can use the following entry in `.vscode\launch.json`. Once done, press `F5` to start the test.
 
 ```json
 {
@@ -77,60 +75,78 @@ Once done press `F5` to start the test.
 }
 ```
 
-### Run application as Local Container
+### Running the Application as a Local Container
 
-- Run container with building new image: `docker compose -f .\docker-compose.yml up -d --build`
+- To run the container with a new image build, use: `docker compose -f .\docker-compose.yml up -d --build`
 
-### MongoDB - Client
+### MongoDB Client
 
-To connect and access data for MongoDB, you can use a client tool `MongoDB Compass`
-It is a free s/w and can be downloaded from the internet.
+To connect and access data in MongoDB, you can use the client tool **MongoDB Compass**. It is a free software and can be downloaded from the internet.
 
-To connect simpally add a new connection e.g. `mongodb://admin:password@host.docker.internal:27017/` ensuring all values are correct
+To connect, simply add a new connection with the string `mongodb://admin:password@host.docker.internal:27017/`, ensuring all values are correct.
 
 ---
 
 # Features Implemented
 
-Following are the features that have been incorporated in the service.
+The following features have been incorporated into the service.
 
-## RESTful service
+## RESTful Service
 
-This service exposes REST based end-points and uses OpenAPI specification 3.x, and follows spers first approach.
+This service exposes REST-based endpoints, uses OpenAPI Specification 3.x, and follows a specification-first approach.
 
-- All `controller` are under `app\controllers` folder.
-- OpenAPI Specification (swagger-ui) is available under `app\controllers\spec\openapi.yaml`
-- To open the specs `http://127.0.0.1:5000/ui`
+- All `controllers` are located in the `app\controllers` folder.
+- The OpenAPI Specification (swagger-ui) is available under `app\controllers\spec\openapi.yaml`.
+- To view the specifications, visit `http://127.0.0.1:5000/ui`.
+- It also has a service, so it demonstrate using a servcie layer `app\services\voting_service.py`
 
-**[IMPORTANT]** For Devlopers
+  - It has connectivity to Database Store, Kafka Stream etc.
+  - Note the servcie layer is not only to be used by API service but can be used by anyone.
 
-- Ensure the specs are always upto-date.
-- Always add all the correct Request and Response objects including all the Error's.
-- Hint: Using the `operationId` it is able to connect to the required controller/method.
+- We also have a DTO built, there can be found in `app\dto` folder
+
+  - It has a base class that provides basic function on DTo and object manupilation
+
+**Important for Developers**
+
+- Ensure the specifications are always up-to-date.
+- Always include the correct Request and Response objects, including all Errors.
+- **Hint**: Using the `operationId`, it is possible to connect to the required controller/method.
+
+## Service Layer and DTO
+
+A service layer has been inp-lementes, the idea is all Busineess Logic, DB operation all core logic would reside in here.
+All services are found under `app\services\` folder.
+
+The layer is complemented with DTO object that are simple objects. The DTO inherits from `base_dto` and it has basic common
+functionality. All DTO are found under `app\dto` folder.
+
+## Helper Class
+
+- app\helpers\config_wrapper.py - Provides wrapper to read `config.yaml` file and provide a centralise way to consume the configurations.
+- app\helpers\database_wrapper.py - Wrapper for MongoDB
+- app\helpers\decorators.py - All decorators are present in here.
+- app\helpers\exception_handler.py - Basic exception handlers 50x and 40x
+- app\helpers\kafka_wrapper.py - Wrapper to consume Kafka Streams
 
 ## Kafka Stream
 
-A wrapper has been written to hide all the complication to Publish and Consume messages.
+A wrapper has been developed to simplify publishing and consuming messages.
 
-- Kafka Client - Using confluent_kafka client, tested with cluster setup, Update `kafka_server` section in `config.yaml`
-- Kafka Publisher - Wrapper for kafka publisher with retries and writing to db, with configs
+- **Kafka Client**: Uses the `confluent_kafka` client and has been tested with a cluster setup. Update the `kafka_server` section in `config.yaml`.
+- **Kafka Publisher**: Wrapper for the Kafka publisher with retries and database writing configurations.
 
-## Misc Features
+## Miscellaneous Features
 
-- Sample Service
-- DTO Objects - Base class, sample dto
-- MongoDb - Database Wrapper
-- Error Handler - Server (500), Input/Client error (400)
-- Logging Config - Write to console
-- API Testing - Controller to Service, with mocking (patch) DB layer.
-- Algo, module - [@Dev] Create Unit Test under /tests/unit_tests
-- Configuration - Configure get sstored in `config.yaml`
-- Docker-Compose - Start app locally including all dependencies
+- Logging Configuration: Writes logs to console
+- API Testing: Controller to service with mocking (patch) DB layer
+- Test Algorithm Module: [@Dev] Create unit tests under `/tests/unit_tests`
+- Docker-Compose: Starts app locally, including all dependencies
 
 ## Pending Items
 
-- kafka consumer
-- docker for app - having issue running from docker
-- Use production ready Server
-- Clean-up readme.md
-- cockroach db
+- Kafka consumer
+- Docker for app -> Issues running from Docker
+- Use production-ready server
+- Clean-up `README.md`
+- CockroachDB integration
