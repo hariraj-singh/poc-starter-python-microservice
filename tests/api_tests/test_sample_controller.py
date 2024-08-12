@@ -11,7 +11,10 @@ class TestVotingController(unittest.TestCase):
 
     @patch("app.services.voting_service.votes_collection.insert_one")
     @patch("app.services.voting_service.votes_collection.find_one")
-    def test_create_vote_valid_data(self, mock_find_one, mock_insert_one):
+    @patch("app.services.voting_service.kafka_wrapper.publish_message")
+    def test_create_vote_valid_data(
+        self, mock_publish_message, mock_find_one, mock_insert_one
+    ):
         """Test create_vote with valid data and get 201"""
         with self.app.test_request_context(
             "/api/v1/create_vote",
@@ -42,6 +45,11 @@ class TestVotingController(unittest.TestCase):
                     "vote_value": "up_vote",
                 },
             )
+
+            # # Verify Kafka publish_message was called
+            # mock_publish_message.assert_called_once_with(
+            #     topic="votes_topic", key="1", value=mock_vote_data
+            # )
 
     @parameterized.expand(
         [
