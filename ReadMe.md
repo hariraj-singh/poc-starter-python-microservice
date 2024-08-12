@@ -1,28 +1,26 @@
-Where am i stop
+# Starter-Service
 
-## Overview
+Overview of the Microservice
 
-TBD
+- [Name of the Service]
+- [Few lines of description about the service]
 
-## Features implemented
+## Checklist for the Service
 
-- Swagger-UI
-- Sample Controller
-- Sample Service
-- DTO Objects - Base class, sample dto
-- MongoDb - Database Wrapper
-- Error Handler - Server (500), Input/Client error (400)
-- Logging Config - Write to console
-- API Testing - Controller to Service, with mocking (patch) DB layer.
-- Algo, module - [@Dev] Create Unit Test under /tests/unit_tests
-- Configuration - Configure get sstored in `config.yaml`
-- Docker-Compose - Start app locally including all dependencies
+    - OpenAPI upto date: [Yes/No]
+    - Database: [if so specify]
+    - Kafka Dependency: [if so specify]
+    - End-points Tests: [if so specify]
+    - Unit-Tests: [if so specify]
 
-## pending
+## Configuration Description
 
-- cockroach db
-- kafka consumer.producer
-- docker for app - having issue running from docker
+Find below documentation for the configuration, the file can be found under `config.yml`
+
+    - [parameter]: [Description]
+    - [parameter]: [Description]
+    - [parameter]: [Description]
+    - [parameter]: [Description]
 
 # For Developers
 
@@ -81,3 +79,39 @@ To connect and access data for MongoDB, you can use a client tool `MongoDB Compa
 It is a free s/w and can be downloaded from the internet.
 
 To connect simpally add a new connection e.g. `mongodb://admin:password@host.docker.internal:27017/` ensuring all values are correct
+
+`=========================================
+IMPORTANT: This section should be removed
+=========================================`
+
+# Documentation for the Starter-Kit
+
+## Features Implemented
+
+- RESTful service
+
+  - Sample Controller
+    - This provides sample end-point with POST and GET examples.
+  - Swagger-UI - The RESTful endpoint is controller by OpenAPI spec, the file is available under `app\controllers\spec\openapi.yaml`
+
+    - Ensure the specs are always upto-date.
+    - Always add all the correct Request and Response objects including all the Error's.
+    - Hint: Using the `operationId` it is able to connect to the required controller/method.
+
+- Sample Service
+- DTO Objects - Base class, sample dto
+- MongoDb - Database Wrapper
+- Error Handler - Server (500), Input/Client error (400)
+- Logging Config - Write to console
+- API Testing - Controller to Service, with mocking (patch) DB layer.
+- Algo, module - [@Dev] Create Unit Test under /tests/unit_tests
+- Configuration - Configure get sstored in `config.yaml`
+- Docker-Compose - Start app locally including all dependencies
+
+## pending
+
+- cockroach db
+- kafka consumer.producer
+- docker for app - having issue running from docker
+- Use production ready Server
+- Clean-up readme.md
