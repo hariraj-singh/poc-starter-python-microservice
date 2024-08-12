@@ -6,22 +6,23 @@ TBD
 
 ## Features implemented
 
-- MongoDb - Database Wrapper
 - Swagger-UI
 - Sample Controller
 - Sample Service
 - DTO Objects - Base class, sample dto
+- MongoDb - Database Wrapper
 - Error Handler - Server (500), Input/Client error (400)
 - Logging Config - Write to console
+- API Testing - Controller to Service, with mocking (patch) DB layer.
+- Algo, module - [@Dev] Create Unit Test under /tests/unit_tests
 
 ## pending
 
+- cockroach db
 - kafka consumer.producer
 - docker compose for dev
 - docker for app
-- tests API
-- tests Modules
-- test algo
+- add config for db, kafka etc.
 
 # For Developers
 
