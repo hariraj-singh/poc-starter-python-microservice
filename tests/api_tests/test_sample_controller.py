@@ -1,39 +1,42 @@
 import unittest
 from unittest.mock import patch
-from flask import Flask
-from app.controllers.sample_controller import get_greeting, create_greeting
+from flask import Flask, request, json, jsonify
+import app.controllers.voting_controller as controller
+from app.dto.vote import Vote
 
-class SampleControllerTestCase(unittest.TestCase):
+
+class TestVotingController(unittest.TestCase):
     def setUp(self):
         self.app = Flask(__name__)
-        self.app.route('/api/v1/sample', methods=['GET'])(get_greeting)
-        self.app.route('/api/v1/sample', methods=['POST'])(create_greeting)
-        self.client = self.app.test_client()
 
-    # Correct the path in the patch decorator
-    # @patch('app.controllers.sample_controller.some_external_dependency')
-    def test_get_greeting(self, mock_dependency):
-        # Mock the external dependency behavior
-        mock_dependency.return_value = "mocked response"
+    def test_create_vote(self):
+        with self.app.test_request_context(
+            "/api/v1/create_vote",
+            method="POST",
+            json={"user_id": "user_123", "vote_value": "up_vote"},
+        ):
+            with patch("app.services.voting_service.cast_vote") as mock_cast_vote:
+                # arrange
+                mock_vote = Vote(vote_id="1", user_id="user_123", vote_value="up_vote")
+                mock_cast_vote.return_value = mock_vote
 
-        response = self.client.get('/api/v1/sample')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json, {"message": "Hello, World!"})
+                # act
+                response, status_code = controller.create_vote()  # unpack the tuple
 
-    # Correct the path in the patch decorator
-    # @patch('app.services.sample_service.some_database_call')
-    def test_create_greeting(self, mock_database_call):
-        # Mock the database call behavior
-        mock_database_call.return_value = True
+                # assert
+                self.assertEqual(status_code, 201)  # check status code
+                response_data = json.loads(
+                    response.get_data(as_text=True)
+                )  # get json data from response
+                self.assertEqual(
+                    response_data,
+                    {
+                        "vote_id": "1",
+                        "user_id": "user_123",
+                        "vote_value": "up_vote",
+                    },  # this should match your mock
+                )
 
-        response = self.client.post('/api/v1/sample', json={"name": "Alice"})
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.json, {"message": "Hello, Alice!"})
 
-        # Test with missing name field
-        response = self.client.post('/api/v1/sample', json={})
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json, {"error": "Invalid input data."})
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
