@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch, MagicMock, ANY
 from flask import Flask, json
 import app.controllers.voting_controller as controller
 from parameterized import parameterized
@@ -46,10 +46,12 @@ class TestVotingController(unittest.TestCase):
                 },
             )
 
-            # # Verify Kafka publish_message was called
-            # mock_publish_message.assert_called_once_with(
-            #     topic="votes_topic", key="1", value=mock_vote_data
-            # )
+            # Verify Kafka publish_message was called
+            mock_publish_message.assert_called_once_with(
+                topic="votes_topic",
+                key=ANY,  # Accept any key since it can be a UUID
+                value=ANY,  # Accept any value object
+            )
 
     @parameterized.expand(
         [
