@@ -16,13 +16,13 @@ TBD
 - API Testing - Controller to Service, with mocking (patch) DB layer.
 - Algo, module - [@Dev] Create Unit Test under /tests/unit_tests
 - Configuration - Configure get sstored in `config.yaml`
+- Docker-Compose - Start app locally including all dependencies
 
 ## pending
 
 - cockroach db
 - kafka consumer.producer
-- docker compose for dev
-- docker for app
+- docker for app - having issue running from docker
 
 # For Developers
 
@@ -70,3 +70,14 @@ Once done press `F5` to start the test.
             },
         ]
     }
+
+## Run application as Local Container
+
+- Run container with building new image: `docker compose -f .\docker-compose.yml up -d --build`
+
+## Connecting to MongoDB.
+
+To connect and access data for MongoDB, you can use a client tool `MongoDB Compass`
+It is a free s/w and can be downloaded from the internet.
+
+To connect simpally add a new connection e.g. `mongodb://admin:password@host.docker.internal:27017/` ensuring all values are correct

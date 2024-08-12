@@ -160,5 +160,4 @@ terraform.tfstate
 .terraform.lock.hcl
 
 # Custome data
-raw_data
-chunk
+container

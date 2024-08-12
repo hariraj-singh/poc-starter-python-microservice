@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  sample_service:
+    build: .
+    ports:
+      - "5000:5000" # Map TCP port 5000 in the container to port 8081 on the Docker host.
+    networks:
+      - sample_service_bridge
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb_sample_service
+    ports:
+      - "27017:27017"
+    volumes:
+      - /container/mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    networks:
+      - sample_service_bridge
+
+networks:
+  sample_service_bridge:
+    driver: bridge

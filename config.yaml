@@ -1,9 +1,10 @@
+# config.yaml
 open_api:
   spec_dir: app/controllers/spec
   api_doc: openapi.yaml
 
 service:
-  port: 8080
+  port: 5000
 
 mongo_database:
   database_url: mongodb://admin:password@localhost:27017
