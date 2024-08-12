@@ -15,5 +15,6 @@ kafka_server:
   dlq_mongo_database_url: mongodb://admin:password@localhost:27017
   dlq_database_name: kafka_dlq
   default_partition: 3
+  default_replicas: 3
   default_retries: 3
   default_interval: 5

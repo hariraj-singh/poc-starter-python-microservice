@@ -12,24 +12,26 @@ class KafkaWrapper:
         # Load configurations
         config = Config.get_config()
 
-        config_kafka = config["kafka_server"]
+        config_kafka = config.get("kafka_server", None)
 
         kafka_config = {
-            "bootstrap.servers": config_kafka["bootstrap_brokers"],
-            "client.id": config_kafka["client_id"],
+            "bootstrap.servers": config_kafka.get(
+                "bootstrap_brokers", "localhost:29091"
+            ),
+            "client.id": config_kafka.get("client_id"),
         }
         mongo_config = {
-            "uri": config_kafka["dlq_mongo_database_url"],
-            "database": config_kafka["dlq_database_name"],
+            "uri": config_kafka.get("dlq_mongo_database_url"),
+            "database": config_kafka.get("dlq_database_name"),
         }
 
         self.producer = Producer(kafka_config)
         self.admin_client = admin.AdminClient(kafka_config)
-        self.mongo_client = MongoClient(mongo_config["uri"])
-        self.mongo_db = self.mongo_client[mongo_config["database"]]
+        self.mongo_client = MongoClient(mongo_config.get("uri"))
+        self.mongo_db = self.mongo_client[mongo_config.get("database")]
 
         # Other misc configs
-        self.default_partition_count = config_kafka.get("default_partition_count", 1)
+        self.default_partition_count = config_kafka.get("default_partition", 1)
         self.default_replicas = config_kafka.get("default_replicas", 1)
         self.default_retries = config_kafka.get("default_retries", 3)
         self.default_interval = config_kafka.get("default_interval", 5)
@@ -58,7 +60,6 @@ class KafkaWrapper:
         topic: str,
         value,
         key=None,
-        partition=None,  # Allow this to be None to let Kafka handle partitioning
         retries=None,
         retry_interval=None,
     ):
@@ -67,9 +68,6 @@ class KafkaWrapper:
 
         if key is None:
             key = str(uuid.uuid4()).encode("utf-8")  # Ensure the key is a byte string
-
-        if partition is None:
-            partition = self.default_partition_count
 
         if retries is None:
             retries = self.default_retries

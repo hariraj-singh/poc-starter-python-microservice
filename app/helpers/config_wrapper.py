@@ -1,4 +1,5 @@
 import yaml
+import copy
 
 
 class Config:
@@ -16,3 +17,11 @@ class Config:
         if cls._config is None:
             cls.load_config()
         return cls._config
+
+    @classmethod
+    def get_config_as_dict(cls):
+        """Get the configuration as a dictionary."""
+        if cls._config is None:
+            cls.load_config()
+        # Return a deep copy of the config to ensure the original config is not altered
+        return copy.deepcopy(cls._config)
