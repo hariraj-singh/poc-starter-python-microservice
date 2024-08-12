@@ -3,6 +3,8 @@ from pymongo import MongoClient
 
 
 class DatabaseWrapper:
+    DB_VOTE_COLLECTION = "votes"
+
     def __init__(self):
         username = "admin"
         password = "password"

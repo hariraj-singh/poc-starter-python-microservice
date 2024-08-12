@@ -24,16 +24,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                user_id:
-                  type: string
-                  description: ID of the user
-                  example: "user123"
-                vote:
-                  type: string
-                  description: The vote cast by the user
-                  example: "upvote"
+              $ref: "#/components/schemas/vote_new"
       responses:
         "201":
           description: Vote created successfully
@@ -94,6 +85,17 @@ paths:
 
 components:
   schemas:
+    vote_new:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: ID of the user
+          example: "user123"
+        vote_value:
+          type: string
+          description: The vote cast by the user
+          example: "upvote"
     vote_details:
       type: object
       properties:
@@ -105,7 +107,7 @@ components:
           type: string
           description: vote Identifier
           example: "xxxx-xxxxx-xxxxx-xxxxx"
-        vote:
+        vote_value:
           type: string
           description: The vote cast by the user
           example: "upvote"
