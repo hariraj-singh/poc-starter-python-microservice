@@ -9,7 +9,7 @@ servers:
 paths:
   /api/v1/sample:
     get:
-      operationId: api.sample_controller.get_greeting
+      operationId: app.controllers.sample_controller.get_greeting
       summary: Returns a greeting message
       description: |
         This endpoint returns a simple greeting message.
@@ -38,7 +38,7 @@ paths:
                     type: string
                     example: "Internal server error."
     post:
-      operationId: api.sample_controller.create_greeting
+      operationId: app.controllers.sample_controller.create_greeting
       summary: Create a custom greeting message
       description: |
         This endpoint allows you to create a custom greeting message.

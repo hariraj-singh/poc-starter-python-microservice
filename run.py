@@ -6,7 +6,7 @@ from connexion.resolver import RestyResolver
 
 def main():
     # Create the Connexion application instance
-    app = connexion.App(__name__, specification_dir="api/spec")
+    app = connexion.App(__name__, specification_dir="app/controllers/spec")
 
     # Read the OpenAPI spec from the yaml file
     app.add_api("openapi.yaml", resolver=RestyResolver("api"))
