@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 from flask import Flask
-from app.api.sample_controller import get_greeting, create_greeting
+from app.controllers.sample_controller import get_greeting, create_greeting
 
 class SampleControllerTestCase(unittest.TestCase):
     def setUp(self):
@@ -10,7 +10,8 @@ class SampleControllerTestCase(unittest.TestCase):
         self.app.route('/api/v1/sample', methods=['POST'])(create_greeting)
         self.client = self.app.test_client()
 
-    @patch('api.sample_controller.some_external_dependency')
+    # Correct the path in the patch decorator
+    # @patch('app.controllers.sample_controller.some_external_dependency')
     def test_get_greeting(self, mock_dependency):
         # Mock the external dependency behavior
         mock_dependency.return_value = "mocked response"
@@ -19,7 +20,8 @@ class SampleControllerTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json, {"message": "Hello, World!"})
 
-    @patch('api.sample_controller.some_database_call')
+    # Correct the path in the patch decorator
+    # @patch('app.services.sample_service.some_database_call')
     def test_create_greeting(self, mock_database_call):
         # Mock the database call behavior
         mock_database_call.return_value = True

@@ -1,3 +1,4 @@
+# app\controllers\sample_controller.py
 from flask import request, jsonify
 
 def get_greeting():
